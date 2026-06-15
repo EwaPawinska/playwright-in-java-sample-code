@@ -1,10 +1,8 @@
 package com.serenitydojo.playwright;
 
 import com.microsoft.playwright.*;
-import com.microsoft.playwright.assertions.LocatorAssertions;
 import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import com.microsoft.playwright.options.AriaRole;
-import com.microsoft.playwright.options.LoadState;
 import com.microsoft.playwright.options.SelectOption;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
@@ -73,7 +71,7 @@ public class PlaywrightLocatorsTest {
             page.locator("#first_name").fill("Sarah-Jane");
             page.locator(".btnSubmit").click();
             List<String> alertMessages = page.locator(".alert").allTextContents();
-            Assertions.assertTrue(!alertMessages.isEmpty());
+            Assertions.assertFalse(alertMessages.isEmpty());
 
         }
 
@@ -150,7 +148,7 @@ public class PlaywrightLocatorsTest {
         @Test
         void locateVisibleItems() {
             int dropdownItems = page.locator(".dropdown-item:visible").count();
-            Assertions.assertTrue(dropdownItems == 0);
+            Assertions.assertEquals(0, dropdownItems);
         }
     }
 
@@ -169,7 +167,7 @@ public class PlaywrightLocatorsTest {
                     .click();
 
             List<String> errorMessages = page.getByRole(AriaRole.ALERT).allTextContents();
-            Assertions.assertTrue(!errorMessages.isEmpty());
+            Assertions.assertFalse(errorMessages.isEmpty());
         }
 
         @DisplayName("Using the HEADING role")
@@ -200,7 +198,6 @@ public class PlaywrightLocatorsTest {
                     new Page.GetByRoleOptions().setLevel(5)
             );
             assertThat(headings.first()).isVisible();
-
             List<String> level4Headings = headings.allTextContents();
 
             org.assertj.core.api.Assertions.assertThat(level4Headings).isNotEmpty();
@@ -379,7 +376,7 @@ public class PlaywrightLocatorsTest {
         @DisplayName("filtering locators by locator")
         @Test
         void filteringMenuItemsByLocator() {
-            openPage();;
+            openPage();
 
             Locator allProducts = page.locator(".card")
                     .filter(new Locator.FilterOptions().setHas(page.getByText("Out of stock")))
